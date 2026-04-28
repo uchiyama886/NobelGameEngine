@@ -1,0 +1,21 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Java
+*.class
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.eclipse
+
+# Node (Claude Code CLI)
+node_modules/
+
+# macOS
+.DS_Store

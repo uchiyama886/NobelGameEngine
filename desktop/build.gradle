@@ -1,0 +1,36 @@
+apply plugin: 'java-library'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation project(':core')
+    api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
+    api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+}
+
+task run(type: JavaExec, dependsOn: classes) {
+    mainClass = 'com.uchiyama.nobelengine.desktop.DesktopLauncher'
+    classpath = sourceSets.main.runtimeClasspath
+    if (System.getProperty('os.name').toLowerCase().contains('mac')) {
+        jvmArgs '-XstartOnFirstThread'
+    }
+}
+
+jar {
+    dependsOn ':core:jar'
+    archiveFileName = "${appName}-desktop.jar"
+    manifest {
+        attributes 'Main-Class': 'com.uchiyama.nobelengine.desktop.DesktopLauncher'
+    }
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    from sourceSets.main.output
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

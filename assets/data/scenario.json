@@ -1,0 +1,21 @@
+[
+  {
+    "id": "scene_001",
+    "char_name": "Protagonist",
+    "line": "Today, {SHAKE}where should I{ENDSHAKE} go? {WAIT=1} No, {COLOR=cyan}let's go to the club room{CLEARCOLOR}!",
+    "choices": [
+      { "text": "Go to the club room", "nextId": "scene_room" },
+      { "text": "Go home", "nextId": "scene_home" }
+    ]
+  },
+  {
+    "id": "scene_room",
+    "char_name": "ヒロイン",
+    "line": "あ、部室に来たんだね！Webサイトの進捗どう？"
+  },
+  {
+    "id": "scene_home",
+    "char_name": "主人公",
+    "line": "今日は疲れたからもう寝よう……。"
+  }
+]

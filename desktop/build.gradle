@@ -9,11 +9,13 @@ dependencies {
     implementation project(':core')
     api "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    api "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
 }
 
 task run(type: JavaExec, dependsOn: classes) {
     mainClass = 'com.uchiyama.nobelengine.desktop.DesktopLauncher'
     classpath = sourceSets.main.runtimeClasspath
+    workingDir = rootProject.file('assets')
     if (System.getProperty('os.name').toLowerCase().contains('mac')) {
         jvmArgs '-XstartOnFirstThread'
     }

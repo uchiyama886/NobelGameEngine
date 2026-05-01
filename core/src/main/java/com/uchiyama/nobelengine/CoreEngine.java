@@ -1,23 +1,41 @@
 package com.uchiyama.nobelengine;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.kotcrab.vis.ui.VisUI;
+import com.uchiyama.nobelengine.core.Config;
+import com.uchiyama.nobelengine.core.GlobalAssets;
+import com.uchiyama.nobelengine.scene.TitleScreen;
+import com.uchiyama.nobelengine.system.ScenarioManager;
 
-public class CoreEngine extends ApplicationAdapter {
+public class CoreEngine extends Game {
+
+    public GlobalAssets globalAssets;
+    public ScenarioManager scenarioManager;
+    public SpriteBatch batch;
 
     @Override
     public void create() {
         Gdx.app.log("NobelEngine", "Engine initialized");
-    }
 
-    @Override
-    public void render() {
-        Gdx.gl.glClearColor(0.1f, 0.1f, 0.15f, 1f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        scenarioManager = new ScenarioManager();
+        scenarioManager.load(Config.SCENARIO_FILE);
+
+        globalAssets = new GlobalAssets();
+        globalAssets.load(scenarioManager.getAllCharacters());
+
+        VisUI.load();
+        batch = new SpriteBatch();
+
+        setScreen(new TitleScreen(this));
     }
 
     @Override
     public void dispose() {
+        super.dispose();
+        globalAssets.dispose();
+        batch.dispose();
+        VisUI.dispose();
     }
 }

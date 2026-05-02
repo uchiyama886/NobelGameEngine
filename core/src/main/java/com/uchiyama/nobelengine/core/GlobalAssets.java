@@ -1,49 +1,64 @@
 package com.uchiyama.nobelengine.core;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.FileHandleResolver;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
+import com.badlogic.gdx.utils.Disposable;
 
-public class GlobalAssets {
+public class GlobalAssets implements Disposable {
 
-    private final AssetManager assetManager = new AssetManager();
-    private BitmapFont font;
-    private Texture windowTexture;
+    public final AssetManager manager;
+    private Texture whitePixelTexture;
 
-    public void load(String fontCharacters) {
-        assetManager.load(Config.BG_IMAGE, Texture.class);
-        assetManager.load(Config.CHAR_IMAGE, Texture.class);
-        assetManager.load(Config.FACE_IMAGE, Texture.class);
-        assetManager.finishLoading();
+    public GlobalAssets() {
+        manager = new AssetManager();
+
+        FileHandleResolver resolver = new InternalFileHandleResolver();
+        manager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+        manager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);
         pixmap.fill();
-        windowTexture = new Texture(pixmap);
+        whitePixelTexture = new Texture(pixmap);
         pixmap.dispose();
-
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
-            Gdx.files.internal(Config.FONT_FILE));
-        FreeTypeFontGenerator.FreeTypeFontParameter param = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        param.size = 36;
-        param.characters = FreeTypeFontGenerator.DEFAULT_CHARS + fontCharacters;
-        font = generator.generateFont(param);
-        generator.dispose();
     }
 
-    public Texture getBackground()    { return assetManager.get(Config.BG_IMAGE, Texture.class); }
-    public Texture getCharacter()     { return assetManager.get(Config.CHAR_IMAGE, Texture.class); }
-    public Texture getFace()          { return assetManager.get(Config.FACE_IMAGE, Texture.class); }
-    public Texture getWindowTexture() { return windowTexture; }
-    public BitmapFont getFont()       { return font; }
+    public void loadAllAssets() {
+        manager.load(Config.IMG_BG_TEST, Texture.class);
+        manager.load(Config.IMG_CHARA_TEST, Texture.class);
+        manager.load(Config.IMG_FACE_TEST, Texture.class);
 
+        FreeTypeFontLoaderParameter fontParams = new FreeTypeFontLoaderParameter();
+        fontParams.fontFileName = Config.FONT_NOTO_SANS;
+        fontParams.fontParameters.size = 24;
+        fontParams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + Config.JAPANESE_CHARS;
+        manager.load("default_font.ttf", BitmapFont.class, fontParams);
+    }
+
+    public Texture getTexture(String fileName) {
+        return manager.get(fileName, Texture.class);
+    }
+
+    public BitmapFont getDefaultFont() {
+        return manager.get("default_font.ttf", BitmapFont.class);
+    }
+
+    public Texture getWhitePixelTexture() {
+        return whitePixelTexture;
+    }
+
+    @Override
     public void dispose() {
-        assetManager.dispose();
-        if (font != null) font.dispose();
-        if (windowTexture != null) windowTexture.dispose();
+        if (manager != null) manager.dispose();
+        if (whitePixelTexture != null) whitePixelTexture.dispose();
     }
 }

@@ -23,7 +23,8 @@ public class CoreEngine extends Game {
         scenarioManager.load(Config.SCENARIO_FILE);
 
         globalAssets = new GlobalAssets();
-        globalAssets.load(scenarioManager.getAllCharacters());
+        globalAssets.loadAllAssets();
+        globalAssets.manager.finishLoading();
 
         VisUI.load();
         batch = new SpriteBatch();

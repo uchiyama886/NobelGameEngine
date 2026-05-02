@@ -31,6 +31,7 @@ compatibility:
 .claude/skills/nobel-master/memory/01_architecture.md  # アーキテクチャ上の知見
 .claude/skills/nobel-master/memory/02_conventions.md   # コーディング規約・実装パターン
 .claude/skills/nobel-master/memory/03_lessons_learned.md # バグ・罠・教訓
+.claude/skills/nobel-master/memory/design-system.md    # UI/UXデザインシステム（色、余白、コンポーネント仕様）
 ```
 
 Grep または Bash でタスクに関連するキーワードを検索し、ヒットしたセクションを Read で読み込んでから計画を立てる。
@@ -83,13 +84,16 @@ grep -n "キーワード" .claude/skills/nobel-master/memory/*.md
 
 ### Phase 4 — 内省と記録
 
-実装とテストが完了したら、以下の 2 つを自問します。「未来の自分がこのメモを読んで助かるか」が追記するかどうかの判断基準です。
+実装とテストが完了したら、以下の3つを自問します。「未来の自分がこのメモを読んで助かるか」が追記するかどうかの判断基準です。
 
 **自問 1**: 今回の実装で、新しいアーキテクチャやUIコンポーネントの使い方・パターンを確立したか？
 → YES なら `02_conventions.md` に追記する
 
 **自問 2**: 特有のバグ（罠）に遭遇し、それを回避する教訓を得たか？
 → YES なら `03_lessons_learned.md` に追記する
+
+**自問 3**: UIのレイアウト変更、新しい色・フォント・余白の追加、または新規UIコンポーネントの実装を行ったか？
+→ YES なら `design-system.md` を更新し、仕様を常に最新の実装と同期させる
 
 新しい知見がある場合は Write ツールで該当ファイルを更新する。既存の内容は消さず、末尾に以下の形式で追記すること：
 
